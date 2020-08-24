@@ -1,0 +1,1 @@
+`python run.py examples/camLoader_file/config.yaml examples/camLoader_file/camera_positions examples/camLoader_file/scene.obj examples/camLoader_file/output`

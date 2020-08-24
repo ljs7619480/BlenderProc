@@ -1,0 +1,1 @@
+`python run.py examples/lightLoader/config.yaml examples/lightLoader/camera_positions examples/lightLoader/scene.obj examples/lightLoader/output`

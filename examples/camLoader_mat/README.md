@@ -1,0 +1,1 @@
+`python run.py examples/camLoader_mat/config.yaml examples/camLoader_mat/camera_positions examples/camLoader_mat/scene.obj examples/camLoader_mat/output`

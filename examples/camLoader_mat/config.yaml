@@ -1,0 +1,115 @@
+# Args: <cam_file> <obj_file> <output_dir>
+{
+  "version": 3,
+  "setup": {
+    "blender_install_path": "/home/<env:USER>/blender/",
+    "pip": [
+      "h5py"
+    ]
+  },
+  "modules": [
+    {
+      "module": "main.Initializer",
+      "config":{
+        "global": {
+          "output_dir": "<args:2>"
+        }
+      }
+    },
+    {
+      "module": "loader.ObjectLoader",
+      "config": {
+        "path": "<args:1>"
+      }
+    },
+    {
+      "module": "lighting.LightLoader",
+      "config": {
+        "lights": [
+          {
+            "type": "POINT",
+            "location": [5, -5, 5],
+            "energy": 1000
+          }
+        ]
+      }
+    },
+    {
+      "module": "camera.CameraLoader",
+      "config": {
+        "cam_poses": [
+          {
+            "cam2world_matrix": [1.0, 0.0, 0.0, 0.0,
+                                 0.0, 1.0, 0.0, 0.0, 
+                                 0.0, 0.0, 1.0, 0.5, 
+                                 0.0, 0.0, 0.0, 1.0]    
+          },
+          {
+            "cam2world_matrix": [ 0.7073882691671998,  0.0,  0.706825181105366,  0.353,
+                                  0.0,                 1.0,  0.0,                0.0,
+                                  -0.706825181105366,  0.0,  0.7073882691671998, 0.353,
+                                  0.0,                 0.0,  0.0,                1.0]       
+          },
+          {
+            "cam2world_matrix": [0.0, 0.0, 1.0, 0.5,
+                                 0.0, 1.0, 0.0, 0.0, 
+                                -1.0, 0.0, 0.0, 0.0, 
+                                 0.0, 0.0, 0.0, 1.0]        
+          },
+        ],
+        "default_cam_param": {
+          "cam_K": [616.95214844, 0., 324.23962402, 0., 617.11254883, 239.48379517, 0., 0., 1.],
+          "resolution_x": 640,
+          "resolution_y": 480
+        }
+      }
+    },
+    {
+      "module": "manipulators.MaterialManipulator",
+      "config": {
+        "selector": {
+          "provider": "getter.Material",
+          "conditions": {
+            "name": "scene.*"
+          }
+        },
+        "cf_change_to_vertex_color": "Col"
+      }
+    },
+    {
+      "module": "renderer.RgbRenderer",
+      "config": {
+        "output_key": "colors",
+        "samples": 350,
+        "render_normals": True,
+        "normals_output_key": "normals",
+        "render_distance": True,
+        "distance_output_key": "distance"
+      }
+    },
+    {
+      "module": "writer.LightStateWriter",
+      "config": {
+        "attributes_to_write": ["location", "rotation_euler", "energy"]
+      }
+    },
+    {
+      "module": "writer.CameraStateWriter",
+      "config": {
+        "attributes_to_write": ["location", "rotation_euler"]
+      }
+    },
+    {
+      "module": "writer.Hdf5Writer",
+      "config": {
+        "postprocessing_modules": {
+          "distance": [
+            {
+              "module": "postprocessing.TrimRedundantChannels",
+            }
+          ]
+        }
+      }
+    }
+  ]
+}
