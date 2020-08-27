@@ -17,9 +17,10 @@
       }
     },
     {
-      "module": "loader.ObjectLoader",
+      "module": "loader.ReplicaLoader",
       "config": {
-        "path": "<args:1>"
+        "data_path" : "<args:1>",
+        "data_set_name": "",
       }
     },
     {
@@ -28,7 +29,7 @@
         "selector": {
           "provider": "getter.Material",
           "conditions": {
-            "name": "scene.*"
+            "name": "ReplicaMaterial"
           }
         },
         "cf_change_to_vertex_color": "Col"
