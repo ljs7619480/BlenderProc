@@ -1,0 +1,1 @@
+`python run.py examples/vertexCol/config.yaml examples/vertexCol/camera_positions examples/vertexCol/scene.obj examples/vertexCol/output`
