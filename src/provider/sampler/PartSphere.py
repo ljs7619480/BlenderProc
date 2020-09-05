@@ -16,6 +16,7 @@ class PartSphere(Provider):
         {
           "provider":"sampler.PartSphere",
           "center": [0, 0, 0],
+          "radius": 2,
           "part_sphere_vector": [1, 0, 0],
           "mode": "SURFACE",
           "distance_above_center": 0.5
