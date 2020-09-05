@@ -18,7 +18,14 @@ print(args.hdf5_paths)
 for fname in os.listdir(args.hdf5_paths):
     print('fname: ', fname)
     data = h5py.File(args.hdf5_paths+'/'+fname, 'r+')
-    print(np.asarray(data['campose']))
-    print(np.asarray(data['light_states']))
+    try:
+        print(np.asarray(data['campose']))
+    except KeyError:
+        print("campose do not saved")
+    try:
+        print(np.asarray(data['light_states']))
+    except KeyError:
+        print("lightpose do not saved")
+        
     plt.imshow(data['colors'])
     plt.show()

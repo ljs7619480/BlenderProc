@@ -33,9 +33,33 @@ class ConfigBuilder():
             }
         }]
 
+    def plyLoader(self, path):
+        """
+        path: path to mesh model save in .ply format
+        """
+        module = {
+            "module": "loader.ReplicaLoader",
+            "config": {
+                "data_path" : path,
+                "data_set_name": "",
+            }
+        }
+        self.config["modules"].append(module)
+        
+        module = {
+            "module": "manipulators.MaterialManipulator",
+            "config": {
+                "selector": {
+                    "provider": "getter.Material",
+                    "conditions": {"name": "ReplicaMaterial"}
+                },
+                "cf_change_to_vertex_color": "Col"
+            }
+        }
+        self.config["modules"].append(module)
+
     def cameraLoader(self, poses, intrinsic_mat, resolution):
         """
-            
             poses: list of [loc_x, loc_y, loc_z, rot_euler_x, rot_euler_y, rot_euler_z]
             intrinsic:  (3x3) intrinsic_mat
             resolution: (1x2) [resolurion_x, resolution_y]
@@ -75,24 +99,31 @@ class ConfigBuilder():
         }
         self.config["modules"].append(module)
 
-    def plyLoader(self, path):
+    def camSamplerUniform3d(self, nr_sample, min, max, look_at, inplane_rot, rot_min, rot_max):
+        location = {
+            "provider": "sampler.Uniform3d",
+            "max": min, "min": max
+        },
+        if look_at is None:
+            look_at = {"provider": "getter.POI"}
+
         module = {
-            "module": "loader.ReplicaLoader",
+            "module": "camera.CameraSampler",
             "config": {
-                "data_path" : path,
-                "data_set_name": "",
-            }
-        }
-        self.config["modules"].append(module)
-        
-        module = {
-            "module": "manipulators.MaterialManipulator",
-            "config": {
-                "selector": {
-                    "provider": "getter.Material",
-                    "conditions": {"name": "ReplicaMaterial"}
-                },
-                "cf_change_to_vertex_color": "Col"
+                "cam_poses": [{
+                    "number_of_samples": nr_sample,
+                    "location": location,
+                    "rotation": {
+                        "format": "look_at",
+                        "value": look_at,          
+                        "inplane_rot": {
+                            "provider": "sampler.Value",
+                            "type": "float",
+                            "min": rot_min,
+                            "max": rot_max
+                        }
+                    }
+                }]
             }
         }
         self.config["modules"].append(module)
@@ -159,3 +190,4 @@ if __name__ == "__main__":
     )
     builder.rgbRender(350)
     print(builder.dump('/tmp/foo.yml'))
+    
